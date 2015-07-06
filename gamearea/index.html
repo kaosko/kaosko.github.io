@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>100x100 reversi with pannable & zoomable game area</title>
+  
+  <script type='text/javascript' src='jquery-1.11.0.js'></script>
+  
+  
+  
+  
+  <link rel="stylesheet" type="text/css" href="reversi.css">
+  
+    
+      <script type='text/javascript' src="jquery.panzoom.js"></script>
+    
+  
+    
+      <script type='text/javascript' src="jquery.mousewheel.js"></script>
+    
+  
+  <style type='text/css'>
+    
+  </style>
+  
+
+
+<script type='text/javascript'>//<![CDATA[ 
+$(window).load(function(){
+(function ($) {
+
+    var $parent = $('#floor_plan');
+
+    if($parent.length) {
+
+        // set-up panzoom
+        var $panzoom = $parent.find('.panzoom').panzoom({
+            increment       : 0.5,
+            minScale        : 0.4,
+            maxScale        : 8,
+            startTransform  : 'scale(4.0)',
+            $zoomIn         : $parent.find('A[href=#zoom_in]'),
+            $zoomOut        : $parent.find('A[href=#zoom_out]'),
+            contain         : 'invert'
+        }).panzoom('zoom', true);
+
+        // handle scrolling in and out
+        $panzoom.parent().on('mousewheel.focal', function (e) {
+
+            e.preventDefault();
+
+            var delta = e.delta || e.originalEvent.wheelDelta;
+            var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+
+            $panzoom.panzoom('zoom', zoomOut, {
+                increment   : 0.1,
+                animate     : false,
+                focal       : e
+            });
+        });
+    }
+})(jQuery);
+});//]]>  
+
+</script>
+
+
+</head>
+<body>
+  <div id="floor_plan" class="hidden-xs hidden-sm">
+
+    <div class="zoom-control">
+        <a href="#zoom_in"><i class="fa fa-fw fa-plus-square-o"></i></a>
+        <a href="#zoom_out"><i class="fa fa-fw fa-minus-square-o"></i></a>
+    </div>
+    <div class="close">
+        <a href="#close_floor_plan"><i class="fa fa-fw fa-times"></i></a>
+    </div>
+
+    <div class="panzoom">
+        <!--
+        <h1>100x100 reversi</h1>
+        <img src="awesome_tiger.svg" alt="Floor Plan" style="width: 100%; height: auto; display: block" />
+        -->
+        <div id="playground"/>
+    </div>
+    <script type='text/javascript' src="reversi.js"></script>
+    <script> 
+        window.onload = function() {
+            
+            reversi.init('playground');
+        };
+    </script>
+</div>
+  
+</body>
+
+
+</html>
+
